@@ -1,4 +1,4 @@
-name: Ejecutar Pruebas Python
+name: Ejecutar Pruebas Automatizadas
 
 on:
   push:
@@ -21,5 +21,12 @@ jobs:
       - name: Instalar pytest
         run: pip install pytest
 
-      - name: Ejecutar set de pruebas con pytest
-        run: pytest -v
+      - name: Pruebas Unitarias
+        run: pytest -v test_calculos.py
+
+      - name: Pruebas de Integracion (Try y Except)
+        run: pytest -v test_integration.py
+
+      - name: Pruebas de Sistema
+        # Error intencional: se coloca system.py en lugar de test_system.py
+        run: pytest -v system.py
