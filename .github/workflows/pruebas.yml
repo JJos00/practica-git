@@ -28,5 +28,5 @@ jobs:
         run: pytest -v test_integration.py
 
       - name: Pruebas de Sistema
-        # Error intencional: se coloca system.py en lugar de test_system.py
-        run: pytest -v system.py
+        # Correccion: se apunta al archivo correcto test_system.py
+        run: pytest -v test_system.py
