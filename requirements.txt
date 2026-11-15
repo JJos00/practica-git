@@ -1,3 +1,2 @@
-﻿setuptools>=77
-pytest>=8.0
-build
+﻿fastapi
+uvicorn
