@@ -1,9 +1,16 @@
 ﻿from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-app = FastAPI()
+VERSION = "1.0.0"
+app = FastAPI(title="Tienda API", version=VERSION)
 class Compra(BaseModel):
     precio: float
     descuento: float
+@app.get("/health")
+def health_check():
+    return {"status": "ok", "servicio": "tienda-api"}
+@app.get("/version")
+def get_version():
+    return {"version": VERSION, "descripcion": "Version inicial con calculo de descuento e IVA"}
 @app.post("/compra")
 def procesar_compra(compra: Compra):
     if compra.precio < 0:
@@ -12,4 +19,4 @@ def procesar_compra(compra: Compra):
         raise HTTPException(400, "Descuento invalido")
     subtotal = compra.precio * (1 - compra.descuento / 100)
     total = round(subtotal * 1.16, 2)
-    return {"total": total}
+    return {"total": total, "version": VERSION}
