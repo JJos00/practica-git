@@ -1,6 +1,6 @@
 ﻿from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-VERSION = "1.0.0"
+VERSION = "2.0.0"
 app = FastAPI(title="Tienda API", version=VERSION)
 class Compra(BaseModel):
     precio: float
@@ -10,7 +10,7 @@ def health_check():
     return {"status": "ok", "servicio": "tienda-api"}
 @app.get("/version")
 def get_version():
-    return {"version": VERSION, "descripcion": "Version inicial con calculo de descuento e IVA"}
+    return {"version": VERSION, "descripcion": "Version 2 con mejoras en respuesta de estado"}
 @app.post("/compra")
 def procesar_compra(compra: Compra):
     if compra.precio < 0:
