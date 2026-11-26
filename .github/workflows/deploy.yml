@@ -1,0 +1,43 @@
+name: Despliegue Kubernetes
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version a desplegar (ej. v1.0.0 o v2.0.0)"
+        required: true
+        default: "v1.0.0"
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-staging:
+    runs-on: [self-hosted, Windows, X64]
+    environment: staging
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Descargar imagen Docker
+        shell: powershell
+        run: |
+          docker pull ghcr.io/jjos00/practica-git:${{ inputs.version }}
+
+      - name: Preparar imagen para kind
+        shell: powershell
+        run: |
+          docker tag ghcr.io/jjos00/practica-git:${{ inputs.version }} tienda-api:${{ inputs.version }}
+          kind load docker-image tienda-api:${{ inputs.version }} --name devops-clase
+
+      - name: Desplegar en staging
+        shell: powershell
+        run: |
+          kubectl apply -n staging -f k8s/service.yaml
+          kubectl set image deployment/tienda-api tienda=tienda-api:${{ inputs.version }} -n staging
+
+      - name: Verificar despliegue
+        shell: powershell
+        run: |
+          kubectl rollout status deployment/tienda-api -n staging --timeout=120s
