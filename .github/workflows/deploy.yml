@@ -17,9 +17,6 @@ jobs:
     environment: staging
 
     steps:
-      - name: Descargar repositorio
-        uses: actions/checkout@v4
-
       - name: Descargar imagen Docker
         shell: powershell
         run: |
@@ -34,7 +31,7 @@ jobs:
       - name: Desplegar en staging
         shell: powershell
         run: |
-          kubectl apply -n staging -f k8s/service.yaml
+          kubectl apply -n staging -f C:\PracticaGit\usuario_original\k8s\service.yaml
           kubectl set image deployment/tienda-api tienda=tienda-api:${{ inputs.version }} -n staging
 
       - name: Verificar despliegue
